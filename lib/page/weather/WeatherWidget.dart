@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gdg_weather/page/weather/WeatherData.dart';
-import 'package:gdg_weather/page/city/CityWidget.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherWidget extends StatefulWidget {

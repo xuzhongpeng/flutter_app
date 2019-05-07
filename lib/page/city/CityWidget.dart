@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gdg_weather/page/city/CityData.dart';
-import 'package:gdg_weather/page/weather/WeatherWidget.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 
 class CityWidget extends StatefulWidget {
