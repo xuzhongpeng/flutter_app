@@ -1,14 +1,16 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gdg_weather/page/weather/WeatherData.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart'; //文件读取
+import 'package:flutter/services.dart' show rootBundle;
 
 class WeatherWidget extends StatefulWidget {
   String cityName = '';
 
-  WeatherWidget({this.cityName});
+  WeatherWidget();
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -21,16 +23,21 @@ class WeatherState extends State<WeatherWidget> {
 
   WeatherData weather = WeatherData.empty();
 
-  WeatherState(String cityName) {  
-    //print('第一次进来'+cityName2); 
-    if(cityName==''||cityName==null){
-      cityName='南岸';
-    }
-      this.cityName = cityName;
-      _getWeather();
+  WeatherState(String cityName) {
+    //print('第一次进来'+cityName2);
+
+    this.cityName = cityName;
+    _getWeather();
   }
 
   void _getWeather() async {
+    if (this.cityName == '' || this.cityName == null) {
+      this.cityName = await _readCityName();
+    }
+    if (this.cityName == '' || this.cityName == null) {
+      this.cityName = '巴南';
+    }
+    await writeFile(this.cityName);
     WeatherData data = await _fetchWeather();
     setState(() {
       weather = data;
@@ -38,15 +45,48 @@ class WeatherState extends State<WeatherWidget> {
   }
 
   Future<WeatherData> _fetchWeather() async {
-    //
-
-    //final response = await http.get('https://free-api.heweather.com/s6/weather/now?location='+this.cityName+'&key=471ed2617ae24ea4841e6bfd3d9eae69');
     final response =
         await http.get('https://www.tianqiapi.com/api/?city=' + this.cityName);
     if (response.statusCode == 200) {
       return WeatherData.fromJson(json.decode(response.body));
     } else {
       return WeatherData.empty();
+    }
+  }
+
+  //缓存处理
+  localFile(path) async {
+    return new File('$path/cityName.txt');
+  }
+  localPath() async {
+    try {
+      var appDocDir = await getApplicationDocumentsDirectory();
+      return appDocDir.path;
+    } catch (err) {
+      print(err);
+    }
+  }
+  Future<String> loadAsset() async {
+    return await rootBundle.loadString('assets/cityName.txt');
+  }
+  //缓存处理读文件
+  Future<String> _readCityName() async {
+    try {
+        final file = await localFile(await localPath());
+        String str = await file.readAsString();
+        return str;
+    }
+    catch (err) {
+        print(err);
+    }
+  }
+  // 写入 json 数据
+  writeFile(obj) async {
+    try {
+      final file = await localFile(await localPath());
+      return file.writeAsString(obj);
+    } catch (err) {
+      print(err);
     }
   }
 
@@ -87,8 +127,7 @@ class WeatherState extends State<WeatherWidget> {
                           this.cityName = value;
                           _getWeather();
                         });
-                      })
-                  ),
+                      })),
               Container(
                 width: double.infinity,
                 margin: EdgeInsets.only(top: 100.0),

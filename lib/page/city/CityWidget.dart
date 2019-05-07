@@ -24,7 +24,7 @@ class CityState extends State<CityWidget> {
       cityList = citys;
     });
   }
-
+  
   Future<String> loadAsset() async {
     return await rootBundle.loadString('assets/city.json');
   }
