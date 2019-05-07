@@ -52,11 +52,12 @@ class CityState extends State<CityWidget> {
             title: GestureDetector(
               child: Text(cityList[index].cityName),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            WeatherWidget(cityList[index].cityName)));
+                Navigator.pop(context, cityList[index].cityName);
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) =>
+                //             WeatherWidget(cityList[index].cityName)));
               },
             ),
           );

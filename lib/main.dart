@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gdg_weather/page/city/CityWidget.dart';
 import 'package:gdg_weather/page/weather/WeatherWidget.dart';
-
+import 'package:gdg_weather/page/route/index.dart';
 void main(){
   _setTargetPlatformForDesktop();
   setCustomErrorPage();
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        body: CityWidget(),
+        body: myRoute(),
       ),
     );
   }
